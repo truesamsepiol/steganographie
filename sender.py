@@ -3,9 +3,10 @@
 import sys
 import os
 from PIL import Image #pour transformer nos images en niveau 
+import numpy
 
 
-SIZE_IMAGE = 512
+SIZE_IMAGE = 512 
 SIZE_BLOCK = 18
 SUB_SIZE_BLOCK = 6
 MAX_HASH_CODE = 256
@@ -48,12 +49,26 @@ def generationTableHachage(image):
         j = 0
         while j < SIZE_IMAGE:
             blockI = i
+            print("Debut de calcul pour le block de coordonnes (", i, "," , j, ")")
             while blockI < (i + SIZE_BLOCK):
                 blockJ = j
                 while blockJ < (j + SIZE_BLOCK):
-                    #calculer les emax
+                    subBlockI = blockI
+                    while subBlockI < (blockI + SUB_SIZE_BLOCK):
+                        subBlockJ = blockJ
+                        while subBlockJ < (blockJ + SUB_SIZE_BLOCK):
+                            #contruire matrice tmp
+                            subBlockJ += 1
+                        subBlockI += 1
+                    #cacul des valeurs propres
+                    #retrouner le max 
+                    #construire la chaine binaire selon l'arrangement 2
                     blockJ += SUB_SIZE_BLOCK
                 blockI += SUB_SIZE_BLOCK
+            #mettre a jour la table de hash
+            # 1- contruction du code ascii en fonction de la chaine binaire
+            # 2- mise a jour de la table
+            print("Fin de calcul pour le block de coordonnes (", i, "," , j, ")")
             j += SIZE_BLOCK
         i += SIZE_BLOCK
 
