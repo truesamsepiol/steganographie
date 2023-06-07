@@ -6,7 +6,7 @@ from PIL import Image #pour transformer nos images en niveau
 import numpy
 
 
-SIZE_IMAGE = 512 
+SIZE_IMAGE = 504 #travailler avec des multiples de 18 pour eviter des debordements de memoire (a regler plustard)
 SIZE_BLOCK = 18
 SUB_SIZE_BLOCK = 6
 MAX_HASH_CODE = 256
@@ -24,12 +24,41 @@ hashTable = []
 #secret
 secret = ""
 
-#-0 Initialisation de la table de hash
+#Initialisation de la table de hash 
 def init():
+
     for id in range(MAX_HASH_CODE):
         hashTable.append(Hash(0, 0, 0))
 
-#1- Generation de la table de hachage a partir d'une image
+
+#contruction d'une matrice de taille SUB_SIZE_BLOCK * SUB_SIZE_BLOCK
+#calcul puis retourne le max des valeurs propres
+def maxValeursPropres(debutI, finI, debutJ, finJ, data):
+
+    matrice = numpy.zeros((SUB_SIZE_BLOCK, SUB_SIZE_BLOCK))
+    x = 0
+    i = debutI
+    while i < finI:
+        j = debutJ
+        y = 0
+        while j < finJ:
+            matrice[x][y] = data[i][j]
+            print(data[i][j], end=" ")
+            j += 1
+            y += 1
+        print()
+        i += 1
+        x += 1
+
+    valeursPropres = numpy.linalg.eigvals(matrice)
+    for valeur in valeursPropres:
+        print(valeur, end=" ")
+    print()
+
+    return max(valeursPropres) 
+
+
+#Generation de la table de hachage a partir d'une image
 def generationTableHachage(image):
 
     #Transformation de l'image en niveau de gris
@@ -39,6 +68,17 @@ def generationTableHachage(image):
     #redimenstionner l'image
     newDim = (SIZE_IMAGE, SIZE_IMAGE)
     imageGray = imageGray.resize(newDim)
+
+    #Recuperation des dimensions et contenu de l'image
+    largeur, hauteur = imageGray.size                  
+    lign = []
+    imageData = []
+    for valeur in list(imageGray.getdata()):
+        lign.append(valeur)
+        if len(lign) == largeur:
+            imageData.append(lign)
+            lign = []
+    #fin recuperation dimension  et contenu
 
     #initialisation de la table de hachage
     init()
@@ -53,15 +93,9 @@ def generationTableHachage(image):
             while blockI < (i + SIZE_BLOCK):
                 blockJ = j
                 while blockJ < (j + SIZE_BLOCK):
-                    subBlockI = blockI
-                    while subBlockI < (blockI + SUB_SIZE_BLOCK):
-                        subBlockJ = blockJ
-                        while subBlockJ < (blockJ + SUB_SIZE_BLOCK):
-                            #contruire matrice tmp
-                            subBlockJ += 1
-                        subBlockI += 1
-                    #cacul des valeurs propres
-                    #retrouner le max 
+                    #retroune le max des valeurs propres
+                    _max = maxValeursPropres(blockI, blockI + SUB_SIZE_BLOCK, blockJ, blockJ + SUB_SIZE_BLOCK, imageData)
+                    print(" max ==> ", _max)
                     #construire la chaine binaire selon l'arrangement 2
                     blockJ += SUB_SIZE_BLOCK
                 blockI += SUB_SIZE_BLOCK
@@ -71,6 +105,7 @@ def generationTableHachage(image):
             print("Fin de calcul pour le block de coordonnes (", i, "," , j, ")")
             j += SIZE_BLOCK
         i += SIZE_BLOCK
+    #fin de la boucle principale
 
     
 
