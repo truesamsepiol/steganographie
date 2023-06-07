@@ -55,7 +55,7 @@ def maxValeursPropres(debutI, finI, debutJ, finJ, data):
         print(valeur, end=" ")
     print()
 
-    return max(valeursPropres) 
+    return max(valeursPropres).real #retourner uniquement la partie reel
 
 
 #Generation de la table de hachage a partir d'une image
