@@ -136,7 +136,7 @@ def incorporationSecret(secret):
         cle += str(hashTable[code].x) + "," + str(hashTable[code].y) + "\n"
 
     if send:
-        fichier = open("cleSecretePartage", "w")
+        fichier = open("cleSecretePartagee", "w")
         fichier.write(cle)
         fichier.close()
         print("\n\n\n       SUCCES. Secret dissimuler dans l'image\n\n")
