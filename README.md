@@ -1,11 +1,11 @@
 #steganographie
 
 Auteur
-	Ecris par samsepiol 
+Ecris par samsepiol 
 Email
-	 true.samsepiol@gmail.com
+true.samsepiol@gmail.com
 Date
-	Fais a Yaoundé Anguissa Jeudi 08 Juin 2023
+Fais a Yaoundé Anguissa Jeudi 08 Juin 2023
 
 
 Description
